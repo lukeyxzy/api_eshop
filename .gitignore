@@ -1,0 +1,8 @@
+# Composer dependencies
+backend/vendor/
+
+# Configuration file
+.env
+
+# Admin uploads
+/images/uploads/
