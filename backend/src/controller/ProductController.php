@@ -14,7 +14,6 @@ class ProductController {
     }
 
     public function addProduct($token) {
-       try {  
         if(!$token) {
             throw new AuthenticationException("Nejste příhlášení.");
         }  
@@ -32,19 +31,6 @@ class ProductController {
         
         $this->productService->addProduct($token, $categoryId, $name, $description, $price, $image);
         echo json_encode(["success" => true]);
-        }
-        catch(ValidatationException | AuthenticationException | UnauthorizedException $e) {
-            http_response_code(400);
-            echo json_encode(["error" => $e->getMessage()]);
-        }
-        catch(Exception $e) {
-            http_response_code(500);
-            ErrorLog::logError($e);
-                 echo json_encode(["error" => "Chyba na straně serveru." . $e->getMessage()]);
-        }
-    
-
-
     }
 
 
@@ -64,24 +50,13 @@ class ProductController {
         }
         
 
-    public function getProductById($id) {
-
-        try {          
+    public function getProductById($id) {     
         if(empty($id) || $id < 0) {
         throw new ValidationException("Neplatné id produktu");
         }
             $product = $this->productService->getProductById($id);
             echo json_encode($product);
-        }
-        catch(ValidationException) {
-            http_response_code(400);
-            echo json_encode(["error" => "neplatné id produktu"]);
-        }
-        catch(Exception $e) {
-               http_response_code(500);
-            ErrorLog::logError($e);
-                  echo json_encode(["error" => "Chyba na straně serveru."]);
-        }
+
 
     }
 
@@ -89,8 +64,7 @@ class ProductController {
 
 
     public function getProductsByCategoryId($id) {
-     
-        try {
+
             if(empty($id) || $id < 0) {
             throw new ValidationException("Přišlo špatné id kategorie");
             }
@@ -98,16 +72,6 @@ class ProductController {
             $products = $this->productService->getProductsByCategoryId($id);
 
             echo json_encode($products);
-
-        }
-        catch(ValidationException $e) {
-        echo json_encode(["error" => $e->getMessage()]);
-        }
-        catch(Exception $e) {
-                  http_response_code(500);
-                ErrorLog::logError($e);
-                  echo json_encode(["error" => "Chyba na straně serveru."]);
-        }
 
 
 

@@ -7,6 +7,8 @@ use App\service\UserService;
 use App\repository\UserRepository;
 use App\utils\JwtHelper;
 use App\model\Database;
+use App\exception\ValidationException;
+use App\exception\AuthenticationException;
 
 header("Content-Type: application/json");
 
@@ -31,7 +33,24 @@ function handleRoute($method, $callback) {
         echo json_encode(["error"=> "Nepovolená metoda."]);
         return;
     }
-$callback();
+ try {
+    $callback();
+ }
+       catch(ExpiredException $e) {
+        echo json_encode(["error" => $e->getMessage(), "expired" => true]);
+        http_response_code(401);
+       }
+       catch(ValidationException | AuthenticationException $e) {
+        echo json_encode(["error" => $e->getMessage()]);
+        http_response_code(400);
+       } 
+       catch(Exception $e) {
+        http_response_code(500);
+        ErrorLog::logError($e);
+        echo json_encode(["error" => "Chyba na straně serveru."]);
+       }
+
+
 }
 
 

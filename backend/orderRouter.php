@@ -10,6 +10,11 @@ use App\service\ProductService;
 use App\utils\JwtHelper;
 use App\model\Database;
 use App\repository\productRepository;
+use App\exception\UnauthorizedException;
+use App\exception\ValidationException;
+use App\exception\AuthenticationException;
+
+
 
 header("Content-Type: application/json");
 
@@ -36,7 +41,15 @@ function handleRoute($method, $callback) {
         echo json_encode(["error"=> "Nepovolená metoda."]);
         return;
     }
-$callback();
+try {
+  $callback();
+}
+    catch(ValidationException | AuthenticationException $e) {
+      echo json_encode(["error" => $e->getMessage()]);
+    }
+    catch(Exception $e) {
+           ErrorLog::logError($e);
+    }
 }
 
 switch($path) {

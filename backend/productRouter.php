@@ -7,6 +7,11 @@ use App\service\ProductService;
 use App\repository\ProductRepository;
 use App\utils\JwtHelper;
 use App\model\Database;
+use App\exception\UnauthorizedException;
+use App\exception\ValidationException;
+use App\exception\AuthenticationException;
+
+
 
 $token = $_SERVER["HTTP_AUTHORIZATION"] ?? "";
 $uri = $_SERVER["REQUEST_URI"];
@@ -29,7 +34,18 @@ function handleRoute($method, $callback) {
         echo json_encode(["error"=> "Nepovolená metoda."]);
         return;
     }
-$callback();
+try {
+    $callback();
+}
+        catch(ValidationException | AuthenticationException | UnauthorizedException $e) {
+            http_response_code(400);
+            echo json_encode(["error" => $e->getMessage()]);
+        }
+        catch(Exception $e) {
+            http_response_code(500);
+            ErrorLog::logError($e);
+                 echo json_encode(["error" => "Chyba na straně serveru." . $e->getMessage()]);
+        }
 }
 
 

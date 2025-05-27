@@ -8,7 +8,8 @@ use App\service\CategoryService;
 use App\repository\CategoryRepository;
 use App\model\Database;
 use App\utils\JwtHelper;
-
+use App\exception\UnauthorizedException;
+use App\exception\ValidationException;
 
 
 header("Content-Type: application/json");
@@ -35,7 +36,18 @@ function handleRoute($method, $callback) {
         echo json_encode(["error"=> "Nepovolená metoda."]);
         return;
     }
-$callback();
+try {
+    $callback();
+}
+        catch(UnauthorizedException | ValidationException $e) {
+        http_response_code(400);
+        echo json_encode(["error" => $e->getMessage()]);
+       }
+       catch(Exception $e) {
+        ErrorLog::logError($e);
+        http_response_code(500);
+        echo json_encode(["error" => "Nastala chyba na serveru, opakujte akci později."]);
+       }
 }
 
 switch($path) {
