@@ -4,5 +4,6 @@ backend/vendor/
 # Configuration file
 .env
 
-# Admin uploads
-/images/uploads/
+# Admin images uploads (product images)
+/images/uploads/*
+!/images/uploads/.gitkeep
