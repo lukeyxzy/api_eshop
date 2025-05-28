@@ -5,10 +5,11 @@ use App\service\OrderService;
 use App\model\ErrorLog;
 use App\exception\ValidationException;
 use App\exception\AuthenticationException;
+use App\controller\BaseController;
 use Exception;
 
 
-class OrderController {
+class OrderController extends BaseController {
     private OrderService $orderService;
 
     public function __construct(OrderService $orderService) {
@@ -17,8 +18,7 @@ class OrderController {
 
 
     public function placeOrder($token) {
-      $data = json_decode(file_get_contents("php://input"), true);
-
+             $data = $this->getJsonInput();
         if(empty($data["deliveryAddress"]) || empty($data["paymentMethodValue"]) || empty($data["orderItems"])) {
             echo json_encode(["error" => "chybi vsechny hodnoty objednávky"]);
             return;
@@ -31,23 +31,23 @@ class OrderController {
         $resultOrderItems = $this->orderService->addOrderItemsToDb($postedOrderWithDbId);
 
         if (!$resultOrderItems || !$resultDeliveryAddress) {
-          echo json_encode(["error" => "Neúspěšné přijetí objednávky"]);
+          $this->jsonResponse(["error" => "Neúspěšné přijetí objednávky"]);
           return;
         };
-        echo json_encode($postedOrderWithDbId->getId());
+        
+        $this->jsonResponse($postedOrderWithDbId->getId());
     }
 
 
     public function getOrders($token) {
       $result = $this->orderService->getOrders($token);
-      echo json_encode($result);
-
+          $this->jsonResponse($result);
     }
 
 
   public function getOrderDetails($orderId, $token) {
      $output =  $orderDetails = $this->orderService->getOrderDetails($orderId, $token);     
-     echo json_encode($output);
+        $this->jsonResponse($output);
   } 
   
   

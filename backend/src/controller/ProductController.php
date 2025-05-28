@@ -4,9 +4,12 @@ namespace App\controller;
 use App\service\ProductService;
 use App\model\ErrorLog;
 use Exception;
+use App\exception\ValidationException;
+use App\exception\AuthenticationException;
+use Firebase\JWT\ExpiredException;
+use App\controller\BaseController;
 
-
-class ProductController {
+class ProductController extends BaseController {
     private ProductService $productService;
 
     public function __construct(ProductService $productService) {
@@ -30,23 +33,14 @@ class ProductController {
         
         
         $this->productService->addProduct($token, $categoryId, $name, $description, $price, $image);
-        echo json_encode(["success" => true]);
+               $this->jsonResponse(["success" => true]);
     }
 
 
 
     public function getAllProducts() {
-
-        try {
             $productsList = $this->productService->getAllProducts();
-            echo json_encode($productsList);
-        }
-        catch(Exception $e) {
-            ErrorLog::logError($e);
-            http_response_code(500);
-            echo json_encode(["error" => "Chyba na straně serveru"]);
-        }
-
+             $this->jsonResponse($productsList);
         }
         
 
@@ -55,26 +49,18 @@ class ProductController {
         throw new ValidationException("Neplatné id produktu");
         }
             $product = $this->productService->getProductById($id);
-            echo json_encode($product);
-
-
+          $this->jsonResponse($product);
     }
 
 
 
 
     public function getProductsByCategoryId($id) {
-
             if(empty($id) || $id < 0) {
             throw new ValidationException("Přišlo špatné id kategorie");
             }
-
             $products = $this->productService->getProductsByCategoryId($id);
-
-            echo json_encode($products);
-
-
-
+            $this->jsonResponse($products);
     }
 }
 
