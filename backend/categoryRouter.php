@@ -10,7 +10,7 @@ use App\model\Database;
 use App\utils\JwtHelper;
 use App\exception\UnauthorizedException;
 use App\exception\ValidationException;
-
+use App\model\ErrorLog;
 
 header("Content-Type: application/json");
 

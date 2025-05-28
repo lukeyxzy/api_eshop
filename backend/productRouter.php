@@ -10,7 +10,7 @@ use App\model\Database;
 use App\exception\UnauthorizedException;
 use App\exception\ValidationException;
 use App\exception\AuthenticationException;
-
+use App\model\ErrorLog;
 
 
 $token = $_SERVER["HTTP_AUTHORIZATION"] ?? "";
