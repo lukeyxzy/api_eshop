@@ -6,6 +6,7 @@ use App\repository\UserRepository;
 use App\model\User;
 use App\utils\JwtHelper;
 use App\exception\AuthenticationException;
+use App\exception\EmailAlreadyExistsException;
 
 
 class UserService{
@@ -20,9 +21,10 @@ class UserService{
 
 
     public function createUser($userData) { 
+        
         $result = $this->isEmailInDatabase($userData["email"]);
-        if(!$result) {
-            return false;
+        if($result) {
+                throw new EmailAlreadyExistsException("Tento e-mail je již zaregistrovaný, prosím přihlašte se.");
         }
 
  
@@ -46,11 +48,11 @@ private function isEmailInDatabase($email)  {
 
             // email není v databázi
             if (!$passwordObject) {
-                return false;
+                throw new AuthenticationException("Přihlašovací údaje jsou neplatné");
             }
             // heslo nesedí s emailem
             if(!password_verify($password, $passwordObject["password"])) {
-                  return false;
+                throw new AuthenticationException("Přihlašovací údaje jsou neplatné");
             }
 
     $userData = $this->userRepository->getUserDataByEmail($email);

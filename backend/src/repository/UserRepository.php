@@ -39,13 +39,13 @@ class UserRepository {
 
 
     
-    public function isEmailInDatabase($email)  {
+    public function isEmailInDatabase($email) :bool  {
 
             $stmt = $this->pdo->prepare("SELECT id FROM user WHERE email=:email");
             $stmt->bindParam(":email", $email);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $data;
+            return $data !== false;
     }
 
     public function getPasswordByEmail($email) {

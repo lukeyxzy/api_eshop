@@ -9,6 +9,9 @@ use App\utils\JwtHelper;
 use App\model\Database;
 use App\exception\ValidationException;
 use App\exception\AuthenticationException;
+use App\exception\EmailAlreadyExistsException;
+use Firebase\JWT\ExpiredException;
+use App\model\ErrorLog;
 
 header("Content-Type: application/json");
 
@@ -44,6 +47,10 @@ function handleRoute($method, $callback) {
         echo json_encode(["error" => $e->getMessage()]);
         http_response_code(400);
        } 
+       catch(EmailAlreadyExistsException $e) {
+        http_response_code(409);
+        echo json_encode(["error" => $e->getMessage()]);
+       }
        catch(Exception $e) {
         http_response_code(500);
         ErrorLog::logError($e);
