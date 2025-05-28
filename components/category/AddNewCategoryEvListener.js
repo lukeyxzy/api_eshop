@@ -20,9 +20,11 @@ e.preventDefault();
     if(!name) {
         insertResponse("Pole není vyplněno", true);
     }
-
+    const data = {
+        "categoryName": name
+    };
     const token = await getTokenFromLocalStorage();
-    const result = await addCategory(name, token);
+    const result = await addCategory(data, token);
 
     
         if(result["error"]) {

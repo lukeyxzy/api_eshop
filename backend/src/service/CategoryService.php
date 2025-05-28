@@ -18,7 +18,7 @@ class CategoryService {
     }
 
 
-    public function addCategory($catName, $token) {
+    public function addCategory($catData, $token) {
 
      $tokenResult = $this->jwtHelper->validateToken($token);
 
@@ -26,7 +26,7 @@ class CategoryService {
      throw new UnauthorizedException("Nemáte oprávnění na přidávání kategorií");
      }
 
-     $category = new Category($catName, $tokenResult->userId);
+     $category = new Category($catData["categoryName"], $tokenResult->userId);
 
      if (!$category) {
       throw new Exception("Nepovedlo se vytvorit objekt category pomoci tridy Category");
