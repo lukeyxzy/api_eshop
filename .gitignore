@@ -7,3 +7,8 @@ backend/vendor/
 # Admin images uploads (product images)
 /images/uploads/*
 !/images/uploads/.gitkeep
+
+
+# errorLog content
+
+backend/error.log

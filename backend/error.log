@@ -1,4 +1,0 @@
-SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) LINE: 27 FILE: C:\xampp\htdocs\api_eshop\backend\src\model\Database.php
-SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) LINE: 27 FILE: C:\xampp\htdocs\api_eshop\backend\src\model\Database.php
-SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) LINE: 27 FILE: C:\xampp\htdocs\api_eshop\backend\src\model\Database.php
-SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) LINE: 27 FILE: C:\xampp\htdocs\api_eshop\backend\src\model\Database.php
